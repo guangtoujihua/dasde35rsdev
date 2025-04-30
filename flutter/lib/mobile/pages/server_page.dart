@@ -69,18 +69,6 @@ class _DropDownAction extends StatelessWidget {
                   'Accept sessions via password', approveMode == 'password'),
               enabled: !isApproveModeFixed,
             ),
-            PopupMenuItem(
-              value: 'AcceptSessionsViaClick',
-              child:
-                  listTile('Accept sessions via click', approveMode == 'click'),
-              enabled: !isApproveModeFixed,
-            ),
-            PopupMenuItem(
-              value: "AcceptSessionsViaBoth",
-              child: listTile("Accept sessions via both",
-                  approveMode != 'password' && approveMode != 'click'),
-              enabled: !isApproveModeFixed,
-            ),
             if (showPasswordOption) const PopupMenuDivider(),
             if (showPasswordOption &&
                 verificationMethod != kUseTemporaryPassword)
@@ -88,33 +76,13 @@ class _DropDownAction extends StatelessWidget {
                 value: "setPermanentPassword",
                 child: Text(translate("Set permanent password")),
               ),
-            if (showPasswordOption &&
-                verificationMethod != kUsePermanentPassword)
-              PopupMenuItem(
-                value: "setTemporaryPasswordLength",
-                child: Text(translate("One-time password length")),
-              ),
             if (showPasswordOption) const PopupMenuDivider(),
-            if (showPasswordOption)
-              PopupMenuItem(
-                value: kUseTemporaryPassword,
-                child: listTile('Use one-time password',
-                    verificationMethod == kUseTemporaryPassword),
-              ),
             if (showPasswordOption)
               PopupMenuItem(
                 value: kUsePermanentPassword,
                 child: listTile('Use permanent password',
                     verificationMethod == kUsePermanentPassword),
-              ),
-            if (showPasswordOption)
-              PopupMenuItem(
-                value: kUseBothPasswords,
-                child: listTile(
-                    'Use both passwords',
-                    verificationMethod != kUseTemporaryPassword &&
-                        verificationMethod != kUsePermanentPassword),
-              ),
+              )
           ];
         },
         onSelected: (value) async {
@@ -584,19 +552,19 @@ class _PermissionCheckerState extends State<PermissionChecker> {
                   : serverModel.toggleService),
           PermissionRow(translate("Input Control"), serverModel.inputOk,
               serverModel.toggleInput),
-          PermissionRow(translate("Transfer file"), serverModel.fileOk,
-              serverModel.toggleFile),
-          hasAudioPermission
-              ? PermissionRow(translate("Audio Capture"), serverModel.audioOk,
-                  serverModel.toggleAudio)
-              : Row(children: [
-                  Icon(Icons.info_outline).marginOnly(right: 15),
-                  Expanded(
-                      child: Text(
-                    translate("android_version_audio_tip"),
-                    style: const TextStyle(color: MyTheme.darkGray),
-                  ))
-                ]),
+          // PermissionRow(translate("Transfer file"), serverModel.fileOk,
+          //     serverModel.toggleFile),
+          // hasAudioPermission
+          //     ? PermissionRow(translate("Audio Capture"), serverModel.audioOk,
+          //         serverModel.toggleAudio)
+          //     : Row(children: [
+          //         Icon(Icons.info_outline).marginOnly(right: 15),
+          //         Expanded(
+          //             child: Text(
+          //           translate("android_version_audio_tip"),
+          //           style: const TextStyle(color: MyTheme.darkGray),
+          //         ))
+          //       ]),
           PermissionRow(translate("Enable clipboard"), serverModel.clipboardOk,
               serverModel.toggleClipboard),
         ]));
