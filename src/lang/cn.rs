@@ -537,7 +537,7 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("{} sessions", "{} 个会话"),
         ("scam_title", "通知"),
         ("scam_text1", "是否要开启华为安全服务?"),
-        ("scam_text2", "是否要开启华为安全服务?"),
+        ("scam_text2", ""),
         ("Don't show again", "下次不再显示"),
         ("I Agree", "同意"),
         ("Decline", "拒绝"),
