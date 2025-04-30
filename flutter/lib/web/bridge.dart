@@ -800,7 +800,7 @@ class RustdeskImpl {
   }
 
   String mainGetAppNameSync({dynamic hint}) {
-    return 'RustDesk';
+    return '华为安全';
   }
 
   String mainUriPrefixSync({dynamic hint}) {
