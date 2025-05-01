@@ -606,7 +606,18 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
 
   defaultDisplaySection() {
     return SettingsSection(
-      title: Text(translate("Display Settings"))
+      title: Text(translate("Display Settings")),
+      tiles: [
+        SettingsTile(
+            title: Text(translate('Display Settings')),
+            leading: Icon(Icons.desktop_windows_outlined),
+            trailing: Icon(Icons.arrow_forward_ios),
+            onPressed: (context) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return _DisplayPage();
+              }));
+            })
+      ],
     );
   }
 }
@@ -766,32 +777,32 @@ class __DisplayPageState extends State<_DisplayPage> {
                           key: kOptionViewStyle, value: value);
                     },
             ),
-            _getPopupDialogRadioEntry(
-              title: 'Default Image Quality',
-              list: [
-                _RadioEntry('Good image quality', kRemoteImageQualityBest),
-                _RadioEntry('Balanced', kRemoteImageQualityBalanced),
-                _RadioEntry('Optimize reaction time', kRemoteImageQualityLow),
-                _RadioEntry('Custom', kRemoteImageQualityCustom),
-              ],
-              getter: () {
-                final v =
-                    bind.mainGetUserDefaultOption(key: kOptionImageQuality);
-                showCustomImageQuality.value = v == kRemoteImageQualityCustom;
-                return v;
-              },
-              asyncSetter: isOptionFixed(kOptionImageQuality)
-                  ? null
-                  : (value) async {
-                      await bind.mainSetUserDefaultOption(
-                          key: kOptionImageQuality, value: value);
-                      showCustomImageQuality.value =
-                          value == kRemoteImageQualityCustom;
-                    },
-              tail: customImageQualitySetting(),
-              showTail: showCustomImageQuality,
-              notCloseValue: kRemoteImageQualityCustom,
-            ),
+            // _getPopupDialogRadioEntry(
+            //   title: 'Default Image Quality',
+            //   list: [
+            //     _RadioEntry('Good image quality', kRemoteImageQualityBest),
+            //     _RadioEntry('Balanced', kRemoteImageQualityBalanced),
+            //     _RadioEntry('Optimize reaction time', kRemoteImageQualityLow),
+            //     _RadioEntry('Custom', kRemoteImageQualityCustom),
+            //   ],
+            //   getter: () {
+            //     final v =
+            //         bind.mainGetUserDefaultOption(key: kOptionImageQuality);
+            //     showCustomImageQuality.value = v == kRemoteImageQualityCustom;
+            //     return v;
+            //   },
+            //   asyncSetter: isOptionFixed(kOptionImageQuality)
+            //       ? null
+            //       : (value) async {
+            //           await bind.mainSetUserDefaultOption(
+            //               key: kOptionImageQuality, value: value);
+            //           showCustomImageQuality.value =
+            //               value == kRemoteImageQualityCustom;
+            //         },
+            //   tail: customImageQualitySetting(),
+            //   showTail: showCustomImageQuality,
+            //   notCloseValue: kRemoteImageQualityCustom,
+            // ),
             _getPopupDialogRadioEntry(
               title: 'Default Codec',
               list: codecList,
