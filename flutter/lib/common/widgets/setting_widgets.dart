@@ -216,7 +216,9 @@ List<Widget> ServerConfigImportExportWidgets(
 List<(String, String)> otherDefaultSettings() {
   List<(String, String)> v = [
     ('View Mode', kOptionViewOnly),
-    ('Show remote cursor', kOptionShowRemoteCursor)
+	if ((isDesktop || isWebDesktop)) ('Zoom cursor', kOptionZoomCursor),
+	    ('Show quality monitor', kOptionShowQualityMonitor),
+	    ('Mute', kOptionDisableAudio),
   ];
 
   return v;

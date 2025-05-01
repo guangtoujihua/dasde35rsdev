@@ -162,7 +162,7 @@ class WebHomePage extends StatelessWidget {
       // backgroundColor: MyTheme.grayBg,
       appBar: AppBar(
         centerTitle: true,
-        title: Text("${bind.mainGetAppNameSync()} (Preview)"),
+        title: Text("Display Settings"),//${bind.mainGetAppNameSync()} (Preview)
         actions: connectionPage.appBarActions,
       ),
       body: connectionPage,
