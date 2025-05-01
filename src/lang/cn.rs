@@ -326,7 +326,7 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Mobile Actions", "移动端操作"),
         ("Select Monitor", "选择监视器"),
         ("Control Actions", "控制操作"),
-        ("Display Settings", "显示设置"),
+        ("Display Settings", "其他设置"),
         ("Ratio", "比例"),
         ("Image Quality", "画质"),
         ("Scroll Style", "滚屏方式"),

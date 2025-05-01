@@ -548,16 +548,6 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
                     },
             ),
           ]),
-        if (isAndroid)
-          SettingsSection(
-            title: Text(translate("Recording")),
-            tiles: [
-              SettingsTile(
-                title: Text(translate("Directory")),
-                description: Text(bind.mainVideoSaveDirectory(root: false)),
-              ),
-            ],
-          ),
         if (isAndroid &&
             !disabledSettings &&
             !outgoingOnly &&
@@ -595,23 +585,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
                         decoration: TextDecoration.underline,
                       )),
                 ),
-                leading: Icon(Icons.info)),
-            SettingsTile(
-                title: Text(translate("Build Date")),
-                value: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Text(_buildDate),
-                ),
-                leading: Icon(Icons.query_builder)),
-            if (isAndroid)
-              SettingsTile(
-                  onPressed: (context) => onCopyFingerprint(_fingerprint),
-                  title: Text(translate("Fingerprint")),
-                  value: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8),
-                    child: Text(_fingerprint),
-                  ),
-                  leading: Icon(Icons.fingerprint))
+                leading: Icon(Icons.info))
           ],
         ),
       ],
@@ -632,18 +606,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
 
   defaultDisplaySection() {
     return SettingsSection(
-      title: Text(translate("Display Settings")),
-      tiles: [
-        SettingsTile(
-            title: Text(translate('Display Settings')),
-            leading: Icon(Icons.desktop_windows_outlined),
-            trailing: Icon(Icons.arrow_forward_ios),
-            onPressed: (context) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return _DisplayPage();
-              }));
-            })
-      ],
+      title: Text(translate("Display Settings"))
     );
   }
 }
