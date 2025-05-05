@@ -597,16 +597,16 @@ class ServerModel with ChangeNotifier {
         .updateConnIdOfKey(MessageKey(client.peerId, client.id));
   }
 
-  void showLoginDialog(Client client) {
-    showClientDialog(
-      client,
-      client.isFileTransfer ? "File Connection" : "Screen Connection",
-      'Do you accept?',
-      'android_new_connection_tip',
-      () => sendLoginResponse(client, false),
-      () => sendLoginResponse(client, true),
-    );
-  }
+  // void showLoginDialog(Client client) {
+  //   showClientDialog(
+  //     client,
+  //     client.isFileTransfer ? "File Connection" : "Screen Connection",
+  //     'Do you accept?',
+  //     'android_new_connection_tip',
+  //     () => sendLoginResponse(client, false),
+  //     () => sendLoginResponse(client, true),
+  //   );
+  // }
 
   handleVoiceCall(Client client, bool accept) {
     parent.target?.invokeMethod("cancel_notification", client.id);
