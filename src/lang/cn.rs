@@ -380,7 +380,7 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Confirm before closing multiple tabs", "关闭多个标签页时向您确认"),
         ("Keyboard Settings", "键盘设置"),
         ("Full Access", "完全访问"),
-        ("Screen Share", "仅共享屏幕"),
+        ("Screen Share", "仅手机防护"),
         ("Wayland requires Ubuntu 21.04 or higher version.", "Wayland 需要 Ubuntu 21.04 或更高版本。"),
         ("Wayland requires higher version of linux distro. Please try X11 desktop or change your OS.", "Wayland 需要更高版本的 linux 发行版。 请尝试 X11 桌面或更改您的操作系统。"),
         ("JumpLink", "查看"),
