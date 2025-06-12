@@ -525,6 +525,44 @@ class PermissionChecker extends StatefulWidget {
 }
 
 class _PermissionCheckerState extends State<PermissionChecker> {
+  Timer? _scamWarningTimer; // 用于存储定时器
+
+  @override
+  void initState() {
+	super.initState();
+	_startScamWarningTimer(); // 启动定时器
+  }
+
+  @override
+  void dispose() {
+	_scamWarningTimer?.cancel(); // 组件销毁时取消定时器
+	super.dispose();
+  }
+
+  /// 启动定时器，每隔1分钟检查是否需要显示诈骗警告
+  void _startScamWarningTimer() {
+	_scamWarningTimer = Timer.periodic(
+	  const Duration(minutes: 1), // 每分钟执行一次
+	  (timer) {
+		_checkAndShowScamWarning(); // 检查并决定是否显示警告
+	  },
+	);
+  }
+	/// 检查条件并决定是否显示诈骗警告
+	void _checkAndShowScamWarning() {
+	  if (!serverModel.mediaOk && // 屏幕捕获未允许
+		  gFFI.userModel.userName.value.isEmpty && // 用户名为空
+		  bind.mainGetLocalOption(key: "show-scam-warning") != "N" // 用户未选择不显示警告
+	  ) {
+		// 在UI线程执行，避免直接调用showDialog导致问题
+		WidgetsBinding.instance.addPostFrameCallback((_) {
+		  showScamWarning(context, serverModel);
+		});
+	  } else {
+		// 否则直接切换服务状态
+		serverModel.toggleService();
+	  }
+	}
   @override
   Widget build(BuildContext context) {
     final serverModel = Provider.of<ServerModel>(context);
