@@ -376,7 +376,6 @@ class ServerModel with ChangeNotifier {
 
   /// Toggle the screen sharing service.
   toggleService() async {
-	  try{
 		  if (_isStart) {
 		    // final res = await parent.target?.dialogManager
 		    //     .show<bool>((setState, close, context) {
@@ -438,12 +437,8 @@ class ServerModel with ChangeNotifier {
 				await stopService(); // 停止当前运行的服务
 		    }
 		    await startService(); // 启动服务（无论之前状态如何）
-	  } catch (e) {
-	  // print("延迟切换服务失败: $e");
-	  // 可选：提示用户失败（如 ScaffoldMessenger）
-		}
 
-    }
+		}
   }
 
   /// Start the screen sharing service.
