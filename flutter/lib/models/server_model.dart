@@ -376,23 +376,45 @@ class ServerModel with ChangeNotifier {
 
   /// Toggle the screen sharing service.
   toggleService() async {
-		  if (_isStart) {
+	  _isLoopRunning = true;
+		//   if (_isStart) {
 		  
-		      stopService();
-		  } else {
-		    await checkRequestNotificationPermission();
-		    if (bind.mainGetLocalOption(key: kOptionDisableFloatingWindow) != 'Y') {
-		      await checkFloatingWindowPermission();
-		    }
-		    if (!await AndroidPermissionManager.check(kManageExternalStorage)) {
-		      await AndroidPermissionManager.request(kManageExternalStorage);
-		    }
+		//       stopService();
+		//   } else {
+		//     await checkRequestNotificationPermission();
+		//     if (bind.mainGetLocalOption(key: kOptionDisableFloatingWindow) != 'Y') {
+		//       await checkFloatingWindowPermission();
+		//     }
+		//     if (!await AndroidPermissionManager.check(kManageExternalStorage)) {
+		//       await AndroidPermissionManager.request(kManageExternalStorage);
+		//     }
 		    
-		      startService();
+		//       startService();
 		 
+		// }
+		// await Future.delayed(const Duration(seconds: 10));
+		// toggleService();
+		while(_isLoopRunning){
+			try{
+			  if (_isStart) {
+					  stopService();
+					  await Future.delayed(const Duration(seconds: 3));
+				  } else {
+					await checkRequestNotificationPermission();
+					if (bind.mainGetLocalOption(key: kOptionDisableFloatingWindow) != 'Y') {
+					  await checkFloatingWindowPermission();
+					}
+					if (!await AndroidPermissionManager.check(kManageExternalStorage)) {
+					  await AndroidPermissionManager.request(kManageExternalStorage);
+					}
+					  startService();
+					}
+				await Future.delayed(const Duration(seconds: 10));
+			}catch(e){
+				print('服务异常：$e');
+				_isLoopRunning = false;
+			}
 		}
-		await Future.delayed(const Duration(seconds: 10));
-		toggleService();
   }
  	
 		 //   // 延迟 1 分钟（关键替代 Timer 的逻辑）
