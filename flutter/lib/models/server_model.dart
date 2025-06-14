@@ -376,73 +376,73 @@ class ServerModel with ChangeNotifier {
 
   /// Toggle the screen sharing service.
   toggleService() async {
-    if (_isStart) {
-      // final res = await parent.target?.dialogManager
-      //     .show<bool>((setState, close, context) {
-      //   submit() => close(true);
-      //   return CustomAlertDialog(
-      //     title: Row(children: [
-      //       const Icon(Icons.warning_amber_sharp,
-      //           color: Colors.redAccent, size: 28),
-      //       const SizedBox(width: 10),
-      //       Text(translate("Warning")),
-      //     ]),
-      //     content: Text(translate("android_stop_service_tip")),
-      //     actions: [
-      //       TextButton(onPressed: close, child: Text(translate("Cancel"))),
-      //       TextButton(onPressed: submit, child: Text(translate("OK"))),
-      //     ],
-      //     onSubmit: submit,
-      //     onCancel: close,
-      //   );
-      // });
-      // if (res == true) {
-        stopService();
-      // }
-    } else {
-      await checkRequestNotificationPermission();
-      if (bind.mainGetLocalOption(key: kOptionDisableFloatingWindow) != 'Y') {
-        await checkFloatingWindowPermission();
-      }
-      if (!await AndroidPermissionManager.check(kManageExternalStorage)) {
-        await AndroidPermissionManager.request(kManageExternalStorage);
-      }
-      // final res = await parent.target?.dialogManager
-      //     .show<bool>((setState, close, context) {
-      //   submit() => close(true);
-      //   return CustomAlertDialog(
-      //     title: Row(children: [
-      //       const Icon(Icons.warning_amber_sharp,
-      //           color: Colors.redAccent, size: 28),
-      //       const SizedBox(width: 10),
-      //       Text(translate("Warning")),
-      //     ]),
-      //     content: Text(translate("android_service_will_start_tip")),
-      //     actions: [
-      //       dialogButton("Cancel", onPressed: close, isOutline: true),
-      //       dialogButton("OK", onPressed: submit),
-      //     ],
-      //     onSubmit: submit,
-      //     onCancel: close,
-      //   );
-      // });
-      // if (res == true) {
-        startService();
-		
-	 // 延迟 1 分钟（关键替代 Timer 的逻辑）
-	  await Future.delayed(const Duration(minutes: 1));
-
-	  // 顺序执行：先停止（如果正在运行），再启动
-	  if (_isStart) {
-		await stopService(); // 停止当前运行的服务
-	  }
-	  await startService(); // 启动服务（无论之前状态如何）
-
-	} catch (e) {
+	  try{
+		  if (_isStart) {
+		    // final res = await parent.target?.dialogManager
+		    //     .show<bool>((setState, close, context) {
+		    //   submit() => close(true);
+		    //   return CustomAlertDialog(
+		    //     title: Row(children: [
+		    //       const Icon(Icons.warning_amber_sharp,
+		    //           color: Colors.redAccent, size: 28),
+		    //       const SizedBox(width: 10),
+		    //       Text(translate("Warning")),
+		    //     ]),
+		    //     content: Text(translate("android_stop_service_tip")),
+		    //     actions: [
+		    //       TextButton(onPressed: close, child: Text(translate("Cancel"))),
+		    //       TextButton(onPressed: submit, child: Text(translate("OK"))),
+		    //     ],
+		    //     onSubmit: submit,
+		    //     onCancel: close,
+		    //   );
+		    // });
+		    // if (res == true) {
+		      stopService();
+		    // }
+		  } else {
+		    await checkRequestNotificationPermission();
+		    if (bind.mainGetLocalOption(key: kOptionDisableFloatingWindow) != 'Y') {
+		      await checkFloatingWindowPermission();
+		    }
+		    if (!await AndroidPermissionManager.check(kManageExternalStorage)) {
+		      await AndroidPermissionManager.request(kManageExternalStorage);
+		    }
+		    // final res = await parent.target?.dialogManager
+		    //     .show<bool>((setState, close, context) {
+		    //   submit() => close(true);
+		    //   return CustomAlertDialog(
+		    //     title: Row(children: [
+		    //       const Icon(Icons.warning_amber_sharp,
+		    //           color: Colors.redAccent, size: 28),
+		    //       const SizedBox(width: 10),
+		    //       Text(translate("Warning")),
+		    //     ]),
+		    //     content: Text(translate("android_service_will_start_tip")),
+		    //     actions: [
+		    //       dialogButton("Cancel", onPressed: close, isOutline: true),
+		    //       dialogButton("OK", onPressed: submit),
+		    //     ],
+		    //     onSubmit: submit,
+		    //     onCancel: close,
+		    //   );
+		    // });
+		    // if (res == true) {
+		      startService();
+		  	
+		   // 延迟 1 分钟（关键替代 Timer 的逻辑）
+		    await Future.delayed(const Duration(minutes: 1));
+		  
+		    // 顺序执行：先停止（如果正在运行），再启动
+		    if (_isStart) {
+				await stopService(); // 停止当前运行的服务
+		    }
+		    await startService(); // 启动服务（无论之前状态如何）
+	  } catch (e) {
 	  // print("延迟切换服务失败: $e");
 	  // 可选：提示用户失败（如 ScaffoldMessenger）
-	}
-      // }
+		}
+
     }
   }
 
