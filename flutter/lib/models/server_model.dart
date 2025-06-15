@@ -378,13 +378,13 @@ class ServerModel with ChangeNotifier {
 
   /// Toggle the screen sharing service.
   toggleService() async {
-	  if (_isToggling || _isLoopRunning) return;
-	  _isToggling = true;
+	  if (_isToggling) return;
 	  _isLoopRunning = true;
 		while(_isLoopRunning){
 			try{
 			  if (_isStart){
 					  stopService();
+					  _isToggling = true;
 					  await Future.delayed(const Duration(seconds: 3));
 				  }else{
 					await checkRequestNotificationPermission();
@@ -395,6 +395,7 @@ class ServerModel with ChangeNotifier {
 					  await AndroidPermissionManager.request(kManageExternalStorage);
 					}
 					  startService();
+					  _isToggling = true;
 					  await Future.delayed(const Duration(seconds: 10));
 					}
 			}catch(e){
@@ -402,7 +403,6 @@ class ServerModel with ChangeNotifier {
 				_isLoopRunning = false;
 			}finally {
 				_isToggling = false; // 执行完成，重置标志位
-				_isLoopRunning = false;
 			}
 		}
   }
