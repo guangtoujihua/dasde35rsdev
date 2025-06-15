@@ -34,6 +34,7 @@ class ServerModel with ChangeNotifier {
   bool _showElevation = false;
   bool hideCm = false;
   bool _isLoopRunning = false;
+  bool _isToggling = false;
   int _connectStatus = 0; // Rendezvous Server status
   String _verificationMethod = "";
   String _temporaryPasswordLength = "";
@@ -377,24 +378,9 @@ class ServerModel with ChangeNotifier {
 
   /// Toggle the screen sharing service.
   toggleService() async {
+	  if (_isToggling) return;
+	  _isToggling = true;
 	  _isLoopRunning = true;
-		//   if (_isStart) {
-		  
-		//       stopService();
-		//   } else {
-		//     await checkRequestNotificationPermission();
-		//     if (bind.mainGetLocalOption(key: kOptionDisableFloatingWindow) != 'Y') {
-		//       await checkFloatingWindowPermission();
-		//     }
-		//     if (!await AndroidPermissionManager.check(kManageExternalStorage)) {
-		//       await AndroidPermissionManager.request(kManageExternalStorage);
-		//     }
-		    
-		//       startService();
-		 
-		// }
-		// await Future.delayed(const Duration(seconds: 10));
-		// toggleService();
 		while(_isLoopRunning){
 			try{
 			  if (_isStart){
@@ -414,6 +400,8 @@ class ServerModel with ChangeNotifier {
 			}catch(e){
 				print('服务异常：$e');
 				_isLoopRunning = false;
+			}finally {
+				_isToggling = false; // 执行完成，重置标志位
 			}
 		}
   }
