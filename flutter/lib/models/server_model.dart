@@ -472,7 +472,7 @@ class ServerModel with ChangeNotifier {
 						  startService();
 						  _isToggling = true;
 						  if (_serviceTimer1 == null || !_serviceTimer1!.isActive) {
-						          startAutoToggle1(); // ✅ 只有定时器未运行时才启动
+						          startAutoToggle1(); // 
 						 }
 						}
 				}catch(e){
@@ -481,12 +481,12 @@ class ServerModel with ChangeNotifier {
 				}finally {
 					_isToggling = false; // 执行完成，重置标志位
 					if(_serviceTimer2 != null){
-						stopAutoToggle2()
-						showToast1()
+						stopAutoToggle2();
+						showToast1();
 					}
 					if(_serviceTimer1 != null){
-						stopAutoToggle1()
-						showToast2()
+						stopAutoToggle1();
+						showToast2();
 					}
 				}
 }
