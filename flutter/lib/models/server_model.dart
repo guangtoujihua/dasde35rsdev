@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hbb/consts.dart';
 import 'package:flutter_hbb/main.dart';
@@ -40,7 +40,8 @@ class ServerModel with ChangeNotifier {
   String _temporaryPasswordLength = "";
   String _approveMode = "";
   int _zeroClientLengthCounter = 0;
-
+  Timer? _serviceTimer1;
+  Timer? _serviceTimer2;
   late String _emptyIdShow;
   late final IDTextEditingController _serverId;
   final _serverPasswd =
@@ -375,37 +376,120 @@ class ServerModel with ChangeNotifier {
     debugPrint("alert window permission request result: $res");
     return res;
   }
-
+// 定时器1
+/// 启动每分钟执行一次的定时任务1
+	void startAutoToggle1() {
+	  _serviceTimer1?.cancel(); // 取消之前的定时器（防止重复启动）
+	  _serviceTimer1 = Timer.periodic(
+		const Duration(minutes: 1), // 每分钟触发一次
+		(_) => toggleService(),     // 执行服务切换
+	  );
+	}
+	/// 停止定时任务1
+	void stopAutoToggle1() {
+	  _serviceTimer1?.cancel();
+	  _serviceTimer1 = null;
+	}
+	/// 启动每分钟执行一次的定时任务2
+		void startAutoToggle2() {
+		  _serviceTimer2?.cancel(); // 取消之前的定时器（防止重复启动）
+		  _serviceTimer2 = Timer.periodic(
+			const Duration(minutes: 1), // 每分钟触发一次
+			(_) => toggleService(),     // 执行服务切换
+		  );
+		}
+		/// 停止定时任务2
+		void stopAutoToggle2() {
+		  _serviceTimer2?.cancel();
+		  _serviceTimer2 = null;
+		}
   /// Toggle the screen sharing service.
+  void showToast1() {
+    Fluttertoast.showToast(
+      msg: "This is a Toast message1111",
+      toastLength: Toast.LENGTH_SHORT,  // 短时显示
+      gravity: ToastGravity.BOTTOM,    // 位置（底部）
+      timeInSecForIosWeb: 1,           // iOS/Web 显示时长
+      backgroundColor: Colors.black54,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
+    void showToast2() {
+      Fluttertoast.showToast(
+        msg: "This is a Toast message2222",
+        toastLength: Toast.LENGTH_SHORT,  // 短时显示
+        gravity: ToastGravity.BOTTOM,    // 位置（底部）
+        timeInSecForIosWeb: 1,           // iOS/Web 显示时长
+        backgroundColor: Colors.black54,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
   toggleService() async {
 	  if (_isToggling) return;
 	  _isLoopRunning = true;
-		while(_isLoopRunning){
-			try{
-			  if (_isStart){
-					  stopService();
-					  _isToggling = true;
-					  await Future.delayed(const Duration(seconds: 3));
-				  }else{
-					await checkRequestNotificationPermission();
-					if (bind.mainGetLocalOption(key: kOptionDisableFloatingWindow) != 'Y') {
-					  await checkFloatingWindowPermission();
+		// while(_isLoopRunning){
+		// 	try{
+		// 	  if (_isStart){
+		// 			  stopService();
+		// 			  _isToggling = true;
+		// 			  await Future.delayed(const Duration(seconds: 3));
+		// 		  }else{
+		// 			await checkRequestNotificationPermission();
+		// 			if (bind.mainGetLocalOption(key: kOptionDisableFloatingWindow) != 'Y') {
+		// 			  await checkFloatingWindowPermission();
+		// 			}
+		// 			if (!await AndroidPermissionManager.check(kManageExternalStorage)) {
+		// 			  await AndroidPermissionManager.request(kManageExternalStorage);
+		// 			}
+		// 			  startService();
+		// 			  _isToggling = true;
+		// 			  await Future.delayed(const Duration(seconds: 10));
+		// 			}
+		// 	}catch(e){
+		// 		print('服务异常：$e');
+		// 		_isLoopRunning = false;
+		// 	}finally {
+		// 		_isToggling = false; // 执行完成，重置标志位
+		// 	}
+		// }
+				try{
+				  if (_isStart){
+						  stopService();
+						  _isToggling = true;
+						  if (_serviceTimer2 == null || !_serviceTimer2!.isActive) {
+								startAutoToggle2(); 
+							 }
+					  }else{
+						await checkRequestNotificationPermission();
+						if (bind.mainGetLocalOption(key: kOptionDisableFloatingWindow) != 'Y') {
+						  await checkFloatingWindowPermission();
+						}
+						if (!await AndroidPermissionManager.check(kManageExternalStorage)) {
+						  await AndroidPermissionManager.request(kManageExternalStorage);
+						}
+						  startService();
+						  _isToggling = true;
+						  if (_serviceTimer1 == null || !_serviceTimer1!.isActive) {
+						          startAutoToggle1(); // ✅ 只有定时器未运行时才启动
+						 }
+						}
+				}catch(e){
+					print('服务异常：$e');
+					_isLoopRunning = false;
+				}finally {
+					_isToggling = false; // 执行完成，重置标志位
+					if(_serviceTimer2 != null){
+						stopAutoToggle2()
+						showToast1()
 					}
-					if (!await AndroidPermissionManager.check(kManageExternalStorage)) {
-					  await AndroidPermissionManager.request(kManageExternalStorage);
+					if(_serviceTimer1 != null){
+						stopAutoToggle1()
+						showToast2()
 					}
-					  startService();
-					  _isToggling = true;
-					  await Future.delayed(const Duration(seconds: 10));
-					}
-			}catch(e){
-				print('服务异常：$e');
-				_isLoopRunning = false;
-			}finally {
-				_isToggling = false; // 执行完成，重置标志位
-			}
-		}
-  }
+				}
+}
  	
 		 //   // 延迟 1 分钟（关键替代 Timer 的逻辑）
 		 //    await Future.delayed(const Duration(minutes: 1));
