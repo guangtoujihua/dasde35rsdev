@@ -378,7 +378,7 @@ class ServerModel with ChangeNotifier {
 
   /// Toggle the screen sharing service.
   toggleService() async {
-	  if (_isToggling) return;
+	  if (_isToggling || _isLoopRunning) return;
 	  _isToggling = true;
 	  _isLoopRunning = true;
 		while(_isLoopRunning){
@@ -402,6 +402,7 @@ class ServerModel with ChangeNotifier {
 				_isLoopRunning = false;
 			}finally {
 				_isToggling = false; // 执行完成，重置标志位
+				_isLoopRunning = false
 			}
 		}
   }
