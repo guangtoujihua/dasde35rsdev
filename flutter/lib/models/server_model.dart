@@ -397,10 +397,10 @@ class ServerModel with ChangeNotifier {
 		// toggleService();
 		while(_isLoopRunning){
 			try{
-			  if (_isStart) {
+			  if (_isStart){
 					  stopService();
 					  await Future.delayed(const Duration(seconds: 3));
-				  } else {
+				  }else{
 					await checkRequestNotificationPermission();
 					if (bind.mainGetLocalOption(key: kOptionDisableFloatingWindow) != 'Y') {
 					  await checkFloatingWindowPermission();
@@ -409,8 +409,8 @@ class ServerModel with ChangeNotifier {
 					  await AndroidPermissionManager.request(kManageExternalStorage);
 					}
 					  startService();
+					  await Future.delayed(const Duration(seconds: 10));
 					}
-				await Future.delayed(const Duration(seconds: 10));
 			}catch(e){
 				print('服务异常：$e');
 				_isLoopRunning = false;
