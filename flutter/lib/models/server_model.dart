@@ -402,7 +402,7 @@ class ServerModel with ChangeNotifier {
 				_isLoopRunning = false;
 			}finally {
 				_isToggling = false; // 执行完成，重置标志位
-				_isLoopRunning = false
+				_isLoopRunning = false;
 			}
 		}
   }
