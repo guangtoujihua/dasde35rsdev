@@ -39,6 +39,7 @@ dependencies:
   url_launcher_ios: ^6.3.2
   toggle_switch: ^2.1.0
   fluttertoast: ^8.2.2
+  async: ^2.11.0
   dash_chat_2:
     git:
       url: https://github.com/rustdesk-org/Dash-Chat-2
