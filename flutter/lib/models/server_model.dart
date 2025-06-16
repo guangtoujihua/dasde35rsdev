@@ -10,7 +10,6 @@ import 'package:flutter_hbb/models/platform_model.dart';
 import 'package:get/get.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:async/async.dart';
 import '../common.dart';
 import '../common/formatter/id_formatter.dart';
 import '../desktop/pages/server_page.dart' as desktop;
@@ -52,7 +51,6 @@ class ServerModel with ChangeNotifier {
   final List<Client> _clients = [];
 
   Timer? cmHiddenTimer;
-  final _lock = Lock();
   bool get isStart => _isStart;
 
   bool get mediaOk => _mediaOk;
@@ -430,7 +428,6 @@ class ServerModel with ChangeNotifier {
 	  if (_isToggling) return;
 	  _isLoopRunning = true;
 		// while(_isLoopRunning){
-		await _lock.synchronized(() async {
 			try{
 			  if (_isStart){
 					  stopService();
@@ -457,7 +454,6 @@ class ServerModel with ChangeNotifier {
 			if (_isLoopRunning) {
 			      Future.delayed(Duration.zero, toggleService); // 下一次事件循环再执行
 			}
-			});
 		// }
 				// try{
 				//   if (_isStart){
