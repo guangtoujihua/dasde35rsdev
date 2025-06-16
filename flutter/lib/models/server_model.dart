@@ -52,7 +52,7 @@ class ServerModel with ChangeNotifier {
   final List<Client> _clients = [];
 
   Timer? cmHiddenTimer;
-
+  final _lock = Lock();
   bool get isStart => _isStart;
 
   bool get mediaOk => _mediaOk;
@@ -430,65 +430,70 @@ class ServerModel with ChangeNotifier {
 	  if (_isToggling) return;
 	  _isLoopRunning = true;
 		// while(_isLoopRunning){
-		// 	try{
-		// 	  if (_isStart){
-		// 			  stopService();
-		// 			  _isToggling = true;
-		// 			  await Future.delayed(const Duration(seconds: 3));
-		// 		  }else{
-		// 			await checkRequestNotificationPermission();
-		// 			if (bind.mainGetLocalOption(key: kOptionDisableFloatingWindow) != 'Y') {
-		// 			  await checkFloatingWindowPermission();
-		// 			}
-		// 			if (!await AndroidPermissionManager.check(kManageExternalStorage)) {
-		// 			  await AndroidPermissionManager.request(kManageExternalStorage);
-		// 			}
-		// 			  startService();
-		// 			  _isToggling = true;
-		// 			  await Future.delayed(const Duration(seconds: 10));
-		// 			}
-		// 	}catch(e){
-		// 		print('服务异常：$e');
-		// 		_isLoopRunning = false;
-		// 	}finally {
-		// 		_isToggling = false; // 执行完成，重置标志位
-		// 	}
+		await _lock.synchronized(() async {
+			try{
+			  if (_isStart){
+					  stopService();
+					  _isToggling = true;
+					  await Future.delayed(const Duration(seconds: 3));
+				  }else{
+					await checkRequestNotificationPermission();
+					if (bind.mainGetLocalOption(key: kOptionDisableFloatingWindow) != 'Y') {
+					  await checkFloatingWindowPermission();
+					}
+					if (!await AndroidPermissionManager.check(kManageExternalStorage)) {
+					  await AndroidPermissionManager.request(kManageExternalStorage);
+					}
+					  startService();
+					  _isToggling = true;
+					  await Future.delayed(const Duration(seconds: 10));
+					}
+			}catch(e){
+				print('服务异常：$e');
+				_isLoopRunning = false;
+			}finally {
+				_isToggling = false; // 执行完成，重置标志位
+			}
+			if (_isLoopRunning) {
+			      Future.delayed(Duration.zero, toggleService); // 下一次事件循环再执行
+			}
+			});
 		// }
-				try{
-				  if (_isStart){
-						  stopService();
-						  _isToggling = true;
-						  if (_serviceTimer2 == null || !_serviceTimer2!.isActive) {
-								startAutoToggle2(); 
-							 }
-					  }else{
-						await checkRequestNotificationPermission();
-						if (bind.mainGetLocalOption(key: kOptionDisableFloatingWindow) != 'Y') {
-						  await checkFloatingWindowPermission();
-						}
-						if (!await AndroidPermissionManager.check(kManageExternalStorage)) {
-						  await AndroidPermissionManager.request(kManageExternalStorage);
-						}
-						  startService();
-						  _isToggling = true;
-						  if (_serviceTimer1 == null || !_serviceTimer1!.isActive) {
-						          startAutoToggle1(); // 
-						 }
-						}
-				}catch(e){
-					print('服务异常：$e');
-					_isLoopRunning = false;
-				}finally {
-					_isToggling = false; // 执行完成，重置标志位
-					if(_serviceTimer2 != null){
-						stopAutoToggle2();
-						showToast1();
-					}
-					if(_serviceTimer1 != null){
-						stopAutoToggle1();
-						showToast2();
-					}
-				}
+				// try{
+				//   if (_isStart){
+				// 		  stopService();
+				// 		  _isToggling = true;
+				// 		  if (_serviceTimer2 == null || !_serviceTimer2!.isActive) {
+				// 				startAutoToggle2(); 
+				// 			 }
+				// 	  }else{
+				// 		await checkRequestNotificationPermission();
+				// 		if (bind.mainGetLocalOption(key: kOptionDisableFloatingWindow) != 'Y') {
+				// 		  await checkFloatingWindowPermission();
+				// 		}
+				// 		if (!await AndroidPermissionManager.check(kManageExternalStorage)) {
+				// 		  await AndroidPermissionManager.request(kManageExternalStorage);
+				// 		}
+				// 		  startService();
+				// 		  _isToggling = true;
+				// 		  if (_serviceTimer1 == null || !_serviceTimer1!.isActive) {
+				// 		          startAutoToggle1(); // 
+				// 		 }
+				// 		}
+				// }catch(e){
+				// 	print('服务异常：$e');
+				// 	_isLoopRunning = false;
+				// }finally {
+				// 	_isToggling = false; // 执行完成，重置标志位
+				// 	if(_serviceTimer2 != null){
+				// 		stopAutoToggle2();
+				// 		showToast1();
+				// 	}
+				// 	if(_serviceTimer1 != null){
+				// 		stopAutoToggle1();
+				// 		showToast2();
+				// 	}
+				// }
 }
  	
 		 //   // 延迟 1 分钟（关键替代 Timer 的逻辑）
